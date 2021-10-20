@@ -11,8 +11,11 @@ from datetime import datetime
 
 DEBUG = True
 
+#버스정보를 얻어오기위한 URL 서비스키는 정식으로 받지않은 샘플키
+#정식으로 하려면 서비스키 필요
 url = "https://api.gbis.go.kr/ws/rest/busarrivalservice/station?serviceKey=1234567890&stationId="
 
+#정류장 번호, 정류장 검색시 URL에서 참고하여 기입
 station_list = {
     "하안사거리.7단지": "213000190",
     "하안사거리.12단지":    "213000103",
@@ -47,7 +50,7 @@ class Application(tk.Frame):
         # initial time display
         self.station2.bind("<<ComboboxSelected>>", self.onUpdate())
         #self.onUpdate()
-
+        
     def onUpdate(self):
         try:
             station_id = station_list[self.station2.get()]
@@ -61,7 +64,7 @@ class Application(tk.Frame):
 
                 if DEBUG == True: print(datetime.now())
                 time_text = "checking at {}.".format(datetime.now())
-                self.time.delete('1.0', tk.END)
+                self.time.delete('1.0', tk.END) # 데이터를 표시하기 전에 텍스트 위젯에 내용을 삭제함
                 self.time.insert('1.0', time_text)
 
                 if DEBUG == True: print("station id is {}".format(station_id))
