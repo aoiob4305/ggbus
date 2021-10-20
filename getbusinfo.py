@@ -3,7 +3,6 @@ from os import stat
 from tkinter.constants import DISABLED
 from requests import get
 from bs4 import BeautifulSoup
-from xml.etree.ElementTree import parse
 
 import tkinter as tk
 from tkinter import ttk
