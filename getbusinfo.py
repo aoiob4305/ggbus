@@ -67,34 +67,40 @@ class Application(tk.Frame):
 
             if response.status_code == 200:
                 html = response.text
-                soup = BeautifulSoup(html, 'html.parser').msgbody
-                buses = soup.find_all("busarrivallist")
+                soup = BeautifulSoup(html, 'html.parser')#.msgbody
+                if DEBUG == True: print(soup.msgheader.resultcode.text)
 
-                if DEBUG == True: print(datetime.now())
-                time_text = "checking at {}.".format(datetime.now())
-                self.time_current.delete('1.0', tk.END) # 데이터를 표시하기 전에 텍스트 위젯에 내용을 삭제함
-                self.time_current.insert('1.0', time_text)
+                if soup.msgheader.resultcode.text == "0":
+                    buses = soup.msgbody.find_all("busarrivallist")
 
-                if DEBUG == True: print("station id is {}".format(station_id))
-                station_text = "station id is {}".format(station_id)
-                self.station_current.delete('1.0', tk.END)
-                self.station_current.insert('1.0', station_text)
+                    if DEBUG == True: print(datetime.now())
+                    time_text = "checking at {}.".format(datetime.now())
+                    self.time_current.delete('1.0', tk.END) # 데이터를 표시하기 전에 텍스트 위젯에 내용을 삭제함
+                    self.time_current.insert('1.0', time_text)
 
-                self.buslist.delete('1.0', tk.END)
-                for bus in buses:
-                    bus_num = bus.routename.text
-                    bus_predicttime_1 = bus.predicttime1.text
-                    bus_predicttime_2 = bus.predicttime2.text
+                    if DEBUG == True: print("station id is {}".format(station_id))
+                    station_text = "station id is {}".format(station_id)
+                    self.station_current.delete('1.0', tk.END)
+                    self.station_current.insert('1.0', station_text)
 
-                    if bus_predicttime_1 != '':
-                        businfo_text = "버스번호: {}\t첫번째: {}분\t두번째: {}분\n".format(
-                            bus_num, 
-                            bus_predicttime_1,
-                            bus_predicttime_2
-                            )
+                    self.buslist.delete('1.0', tk.END)
+                    for bus in buses:
+                        bus_num = bus.routename.text
+                        bus_predicttime_1 = bus.predicttime1.text
+                        bus_predicttime_2 = bus.predicttime2.text
 
-                        self.buslist.insert(tk.CURRENT, businfo_text)
-            else :
+                        if bus_predicttime_1 != '':
+                            businfo_text = "버스번호: {}\t첫번째: {}분\t두번째: {}분\n".format(
+                                bus_num, 
+                                bus_predicttime_1,
+                                bus_predicttime_2
+                                )
+
+                            self.buslist.insert(tk.CURRENT, businfo_text)
+                else:
+                    print("버스정류장을 찾을 수 없습니다.")
+                    exit()
+            else:
                 if DEBUG == True: print("url couldn't loaded: %s" % (response.status_code)) 
 
         except Exception as e:
@@ -107,7 +113,7 @@ class Application(tk.Frame):
         self.after(60000, self.onUpdate)
 
 root = tk.Tk()
-root.title('버스언제와')
+root.title('버스')
 root.resizable(0, 0)
 root.attributes('-topmost', 1)
 root.attributes('-alpha', 0.8)
