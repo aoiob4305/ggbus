@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+#rev2
 from requests import get
 from bs4 import BeautifulSoup
 
@@ -6,18 +7,20 @@ import tkinter as tk
 from tkinter import ttk
 from datetime import datetime
 
+import configparser as cp
+
 DEBUG = True
 
 #버스정보를 얻어오기위한 URL 서비스키는 정식으로 받지않은 샘플키
 #정식으로 하려면 서비스키 필요
-url = "https://api.gbis.go.kr/ws/rest/busarrivalservice/station?serviceKey=1234567890&stationId="
+#url = "https://api.gbis.go.kr/ws/rest/busarrivalservice/station?serviceKey=1234567890&stationId="
 
 #정류장 번호, 정류장 검색시 URL에서 참고하여 기입
-station_list = {
-    "하안사거리.7단지": "213000190",
-    "하안사거리.12단지":    "213000103",
-    "목감도서관.대명아파트":    "224000081",
-}
+#station_list = {
+#    "하안사거리.7단지": "213000190",
+#    "하안사거리.12단지":    "213000103",
+#    "목감도서관.대명아파트":    "224000081",
+#}
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -108,6 +111,14 @@ root.title('버스언제와')
 root.resizable(0, 0)
 root.attributes('-topmost', 1)
 root.attributes('-alpha', 0.8)
+
+config = cp.ConfigParser()    
+config.read('setting.cfg', encoding='utf-8')
+url = config.get("URL", "url")
+station_list = {
+    config.get("STATION", "station1"): config.get("STATION", "station1_code"),
+    config.get("STATION", "station2"): config.get("STATION", "station2_code"),
+}
 
 app = Application(master=root)
 root.mainloop()
