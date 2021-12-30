@@ -97,6 +97,7 @@ class Application(tk.Frame):
                                 )
 
                             self.buslist.insert(tk.CURRENT, businfo_text)
+                            if DEBUG == True: print(businfo_text)
                 else:
                     print("버스정류장을 찾을 수 없습니다.")
                     exit()
@@ -113,7 +114,7 @@ class Application(tk.Frame):
         self.after(60000, self.onUpdate)
 
 root = tk.Tk()
-root.title('버스')
+root.title('집에 가즈아아아아!!')
 root.resizable(0, 0)
 root.attributes('-topmost', 1)
 root.attributes('-alpha', 0.8)
